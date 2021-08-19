@@ -1,0 +1,10 @@
+#calculator {
+    border: 1px solid black;
+    width: 50%;
+    margin: auto;
+}
+
+#display {
+    border: 3px solid black;
+    padding: 30px;
+}
