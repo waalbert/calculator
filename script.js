@@ -1,91 +1,83 @@
 const display = document.querySelector("#display");
 let displayedNum = 0;
 let num1 = 0;
-let num2 = 0;
+// let num2 = 0;
 let chosenOperator = "";
 let hasMoreThanTwoOperators = false;
+// let operatorUseCount = 0;
+let total = 0;
 
 const nums = document.querySelectorAll(".num");
-nums.forEach(num => num.addEventListener("click", () => updateNums(num.textContent)));
+nums.forEach(num => num.addEventListener("click", () => {
+    updateNums(num.textContent);
+}));
 
 const operators = document.querySelectorAll(".operator");
 operators.forEach(operator => operator.addEventListener("click", () => {
-
-    // if (hasMoreThanTwoOperators) {
-    //     chosenOperator = operator.textContent;
-    //     num1 = operate(chosenOperator, num1, num2);
-        
-    //     // operate(chosenOperator, num1, num2)
-    //     // displayedNum = 0;
-    // } else {
-    //     hasMoreThanTwoOperators = true;
+    if (hasMoreThanTwoOperators) {
         num1 = displayedNum;
-        displayedNum = 0;
-        // display.textContent = "";
-        chosenOperator = operator.textContent;
-        
-    // }
+        operate(chosenOperator, num1);
+    } else {
+        total = Number(displayedNum);
+
+    }
+    chosenOperator = operator.textContent;
+    hasMoreThanTwoOperators = true;
+    displayedNum = 0;
 }));
 
 const equalSign = document.querySelector("#equals");
 equalSign.addEventListener("click", () => {
-    num2 = displayedNum;
+    num1 = displayedNum;
     displayedNum = 0;
-    operate(chosenOperator, num1, num2);
+    operate(chosenOperator, num1);
+    displayNums(total);
 });
 
 const clearBtn = document.querySelector("#clear");
 clearBtn.addEventListener("click", () => {
+    display.style.fontSize = "100px";
+    total = 0;
     hasMoreThanTwoOperators = false;
     displayedNum = 0;
     displayNums(displayedNum);
 });
 
-function add(num1, num2) {
-    displayedNum = Number(num1) + Number(num2);
-    displayNums(displayedNum);
-    return displayedNum;
+function add(num) {
+    total += Number(num);
 }
 
-function subtract(num1, num2) {
-    displayedNum = Number(num1) - Number(num2);
-    displayNums(displayedNum);
-    return displayedNum;
+function subtract(num) {
+    total -= Number(num);
 }
 
-function multiply(num1 , num2) {
-    displayedNum = Number(num1) * Number(num2);
-    displayNums(displayedNum);
-    return displayedNum;
+function multiply(num) {
+    total *= Number(num);
 }
 
-function divide(num1, num2) {
-    if (Number(num2) === 0) {
-        return "FUCK OUT OF HERE WITH YOUR BULLSHIT";
+function divide(num) {
+    if (num == 0) {
+        total = "FUCK OUT OF HERE WITH YOUR BULLSHIT";
+        display.style.fontSize = "30px";
+    } else {
+        total /= Number(num);
     }
-    displayedNum = Number(num1) / Number(num2);
-    displayNums(displayedNum);
-    return displayedNum;
 }
 
-function operate(operator, num1, num2) {
-    if (operator === "+") return add(num1, num2);
-    else if (operator === "-") return subtract(num1, num2);
-    else if (operator === "*") return multiply(num1, num2);
-    else if (operator === "/") return divide(num1, num2);
-    
+function operate(operator, num) {
+    if (operator === "+") add(num);
+    else if (operator === "-") subtract(num);
+    else if (operator === "*") multiply(num);
+    else if (operator === "/") divide(num);
+    displayNums(total);
 }
 
 function updateNums(digit) {
-    // const num = document.createElement("span");
-    
     displayedNum += digit;
-    if (displayedNum[0] === "0") {
+    if (displayedNum[0] === "0") { // automatically removes a 0 as the first digit
         displayedNum = displayedNum.slice(1);
     }
     displayNums(displayedNum);
-    // num.textContent = digit;
-    // display.appendChild(num);
 }
 
 function displayNums(num) {
