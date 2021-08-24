@@ -1,46 +1,92 @@
 const display = document.querySelector("#display");
 let displayedNum = 0;
 let num1 = 0;
-// let num2 = 0;
-let chosenOperator = "";
-let hasMoreThanTwoOperators = false;
-// let operatorUseCount = 0;
 let total = 0;
+let chosenOperator = "";
+let operatorIsChosen = false;
+let isSecondOperator = false;
+let firstDigitIsSelected = false;
+let decimalIsSelected = false;
+let isSecondOperation = false;
 
 const nums = document.querySelectorAll(".num");
 nums.forEach(num => num.addEventListener("click", () => {
+    firstDigitIsSelected = true;
     updateNums(num.textContent);
+    displayNums(displayedNum);
 }));
+
+const decimalPoint = document.querySelector("#decimal");
+decimalPoint.addEventListener("click", () => {
+    if (firstDigitIsSelected && !decimalIsSelected) { // ensures only one decimal point in an inputed number
+        updateNums(decimalPoint.textContent);
+        displayNums(displayedNum);
+        decimalIsSelected = true;
+    }
+});
 
 const operators = document.querySelectorAll(".operator");
 operators.forEach(operator => operator.addEventListener("click", () => {
-    if (hasMoreThanTwoOperators) {
+    operatorIsChosen = true;
+
+    if (isSecondOperator) {
         num1 = displayedNum;
         operate(chosenOperator, num1);
+        displayNums(total);
+        isSecondOperation = true;
     } else {
         total = Number(displayedNum);
 
     }
+    console.log(displayedNum);
     chosenOperator = operator.textContent;
-    hasMoreThanTwoOperators = true;
+    isSecondOperator = true;
     displayedNum = 0;
 }));
 
 const equalSign = document.querySelector("#equals");
 equalSign.addEventListener("click", () => {
-    num1 = displayedNum;
+    if (operatorIsChosen) {
+        isSecondOperation = true;
+        num1 = displayedNum;
+        displayedNum = 0;
+        operate(chosenOperator, num1);
+        displayNums(total);
+        chosenOperator = "";
+        operatorIsChosen = false;
+    } else {
+        chosenOperator = "";
+        total = Number(displayedNum);
+        displayNums(total);
+    }
+});
+
+const backspaceBtn = document.querySelector("#backspace");
+backspaceBtn.addEventListener("click", () => {
     displayedNum = 0;
-    operate(chosenOperator, num1);
-    displayNums(total);
+    displayNums(displayedNum);
 });
 
 const clearBtn = document.querySelector("#clear");
 clearBtn.addEventListener("click", () => {
-    display.style.fontSize = "100px";
     total = 0;
-    hasMoreThanTwoOperators = false;
+    isSecondOperator = false;
+    operatorIsChosen = false;
     displayedNum = 0;
     displayNums(displayedNum);
+});
+
+const plusMinus = document.querySelector("#plusminus");
+plusMinus.addEventListener("click", () => {
+    console.log(displayedNum);
+    if (isSecondOperation) {
+        displayedNum = total;
+        total *= -1;
+    }
+    displayedNum *= -1;
+    displayNums(displayedNum);
+    console.log(displayedNum);
+
 });
 
 function add(num) {
@@ -57,8 +103,7 @@ function multiply(num) {
 
 function divide(num) {
     if (num == 0) {
-        total = "FUCK OUT OF HERE WITH YOUR BULLSHIT";
-        display.style.fontSize = "30px";
+        total = "FUCK OUT OF HERE WITH YOUR BULLSHIT! LAKERS > CELTICS";
     } else {
         total /= Number(num);
     }
@@ -69,7 +114,6 @@ function operate(operator, num) {
     else if (operator === "-") subtract(num);
     else if (operator === "*") multiply(num);
     else if (operator === "/") divide(num);
-    displayNums(total);
 }
 
 function updateNums(digit) {
@@ -77,9 +121,13 @@ function updateNums(digit) {
     if (displayedNum[0] === "0") { // automatically removes a 0 as the first digit
         displayedNum = displayedNum.slice(1);
     }
-    displayNums(displayedNum);
 }
 
 function displayNums(num) {
     display.textContent = num;
+}
+
+function resetDisplayedNum() {
+    displayedNum = 0;
+    displayNums(displayedNum);
 }
