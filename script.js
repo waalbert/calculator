@@ -33,7 +33,7 @@ operators.forEach(operator => operator.addEventListener("click", () => {
         num1 = displayedNum;
         operate(chosenOperator, num1);
         displayNums(total);
-        isSecondOperation = true;
+        // isSecondOperation = true;
     } else {
         total = Number(displayedNum);
 
@@ -47,7 +47,7 @@ operators.forEach(operator => operator.addEventListener("click", () => {
 const equalSign = document.querySelector("#equals");
 equalSign.addEventListener("click", () => {
     if (operatorIsChosen) {
-        isSecondOperation = true;
+        // isSecondOperation = true;
         num1 = displayedNum;
         displayedNum = 0;
         operate(chosenOperator, num1);
@@ -63,8 +63,9 @@ equalSign.addEventListener("click", () => {
 
 const backspaceBtn = document.querySelector("#backspace");
 backspaceBtn.addEventListener("click", () => {
-    displayedNum = 0;
-    displayNums(displayedNum);
+    // displayedNum = 0;
+    // displayNums(displayedNum);
+    resetDisplayedNum();
 });
 
 const clearBtn = document.querySelector("#clear");
@@ -72,17 +73,18 @@ clearBtn.addEventListener("click", () => {
     total = 0;
     isSecondOperator = false;
     operatorIsChosen = false;
-    displayedNum = 0;
-    displayNums(displayedNum);
+    // displayedNum = 0;
+    // displayNums(displayedNum);
+    resetDisplayedNum();
 });
 
 const plusMinus = document.querySelector("#plusminus");
 plusMinus.addEventListener("click", () => {
     console.log(displayedNum);
-    if (isSecondOperation) {
-        displayedNum = total;
-        total *= -1;
-    }
+    // if (isSecondOperation) {
+    //     displayedNum = total;
+    //     total *= -1;
+    // }
     displayedNum *= -1;
     displayNums(displayedNum);
     console.log(displayedNum);
